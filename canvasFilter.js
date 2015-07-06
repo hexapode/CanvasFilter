@@ -49,6 +49,7 @@ function CanvasFilters() {
       imageDataOri = ctx.getImageData(0,0,width, height);
       oriData = imageDataOri.data;
     }
+    return this;
   };
 
 
@@ -94,12 +95,14 @@ function CanvasFilters() {
     var end = Date.now();
   //  ddd('Run Time', end - start, i);
     ctx.putImageData(imageData, 0,0);
+    return this;
   };
 
 
   this.brightness = function(brightness)
   {
     filtersStack += "r += " + brightness + " ;g += " + brightness + ";b += " + brightness + ";";
+    return this;
   };
 
   this.contrast = function(contrast) {
@@ -112,7 +115,8 @@ function CanvasFilters() {
       filtersStack += "r = (r - 0.5) * " + (1.0 + contrast) + " + 0.5;";
       filtersStack += "g = (g - 0.5) * " + (1.0 + contrast) + " + 0.5;";
       filtersStack += "b = (b - 0.5) * " + (1.0 + contrast) + " + 0.5;";
-    }   
+    }
+    return this;  
   };
 
   this.hue = function(hue) {
@@ -126,6 +130,7 @@ function CanvasFilters() {
     filtersStack += "r = R * " + rw + "+ G * " + gw + " + B * " + bw + ";";
     filtersStack += "g = R * " + bw + "+ G * " + rw + " + B * " + gw + ";";
     filtersStack += "b = R * " + gw + "+ G * " + bw + " + B * " + rw + ";";
+    return this;
   }
 
   this.saturation = function(saturation) {
@@ -141,6 +146,7 @@ function CanvasFilters() {
         filtersStack += "g += (average - g) * " + (-saturation) + ";";
         filtersStack += "b += (average - b) * " + (-saturation) + ";";
       }
+      return this;
   }
   
 
@@ -149,12 +155,14 @@ function CanvasFilters() {
     filtersStack += "r = (R * (1.0 - (0.607 * " + amount + "))) + (G * (0.769 * " + amount + ")) + (B * (0.189 * " + amount + "));";
     filtersStack += "g = (R * 0.349 * " + amount + ") + (G * (1.0 - (0.314 * " + amount + "))) + (B * 0.168 * " + amount + ");";
     filtersStack += "b = (R * 0.272 * " + amount + ") + (G * 0.534 * " + amount + ") + (B * (1.0 - (0.869 * " + amount + ")));";
+    return this;
   };
 
   this.invertColor = function() {
     filtersStack += "r = 1.0 - r;";
     filtersStack += "g = 1.0 - g;";
     filtersStack += "b = 1.0 - b;";
+    return this;
   };
 
   this.mirror = function() {
@@ -181,7 +189,7 @@ function CanvasFilters() {
       }
       ++x;
     }
-  
+    return this;
   };
 
   this.vignette = function(size, amount, X, Y, R, G, B) {
@@ -197,12 +205,14 @@ function CanvasFilters() {
       filtersStack += "g = g * temp + (1.0 - temp) * " + G + ";";
       filtersStack += "b = b * temp + (1.0 - temp) * " + B + ";";
     filtersStack += "};"
+    return this;
   }
 
   this.color = function(A, R, G, B) {
     filtersStack += " r += " + (R * A) + ";";
     filtersStack += " g += " + (G * A) + ";";
     filtersStack += " b += " + (B * A) + ";";
+    return this;
   }
 
 
@@ -212,6 +222,7 @@ function CanvasFilters() {
     filtersStack += " r += temp;";
     filtersStack += " g += temp;";
     filtersStack += " b += temp;";
+    return this;
   }
 
 
@@ -219,6 +230,7 @@ function CanvasFilters() {
     filtersStack += " r = Math.pow(r, " + gamma + ");";
     filtersStack += " g = Math.pow(g, " + gamma + ");";
     filtersStack += " b = Math.pow(b, " + gamma + ");";
+    return this;
   }
 
   this.exposure = function(exposure) {
@@ -226,6 +238,7 @@ function CanvasFilters() {
     filtersStack += " r = r * " + e + ";";
     filtersStack += " g = g * " + e + ";";
     filtersStack += " b = b * " + e + ";";
+    return this;
   }
 
   this.threshold = function(threshold, A, R1, G1, B1, R2, G2, B2) {
@@ -246,6 +259,7 @@ function CanvasFilters() {
       filtersStack += "g = " + A + " * " + G2 + " + (1.0 - " + A + ") * g;";
       filtersStack += "b = " + A + " * " + B2 + " + (1.0 - " + A + ") * b;";
     filtersStack += "};";
+    return this;
   }
 
 
@@ -262,20 +276,9 @@ function CanvasFilters() {
         AB += B * weight;\
         temp += weight;\
       }';
+      return this;
   } 
-  this.denoise = function(amount) {
-    //filtersStack += 'temp = 0; AR = 0; AG = 0; AB = 0;';
-    
-    //for (var i = -1; i < 1; ++i) {
-     // for (var j = -1;j < 1; ++j) {
-      //   this.denoiseCompute(i, j, amount);
-     // }
-    //}
-    
-    //filtersStack += 'r = AR / temp;\
-     // g = AG / temp;\
-     // b = AB / temp;';
-  };
+
 
   this.computeInk = function(x, y) {
       filtersStack +=  'if (XP + ' + x + ' > 0 && XP + ' + x +' < WIDTH && YP + ' + y + ' > 0 && YP + ' + y + ' < HEIGHT) {\
@@ -293,6 +296,7 @@ function CanvasFilters() {
       }
 
       filtersStack += '}';
+
   };
 
   this.ink = function(amount) {
@@ -317,6 +321,7 @@ function CanvasFilters() {
       g -= temp * ' + amount + ';\
       b -= temp * ' + amount + ';\
     ';
+    return this;
   };
 
 
@@ -352,6 +357,7 @@ function CanvasFilters() {
         }\
       }\
   '
+  return this;
   };
 
 
@@ -360,10 +366,12 @@ function CanvasFilters() {
     filtersStack += " r =  " + amplitudeR + " * Math.pow(r, " + exponentR + ") + " + offsetR + ";";
     filtersStack += " g =  " + amplitudeG + " * Math.pow(g, " + exponentG + ") + " + offsetG + ";";
     filtersStack += " b =  " + amplitudeB + " * Math.pow(b, " + exponentB + ") + " + offsetB + ";";
+    return this;
   };
 
-  this.gammaRGB = function() {
+  this.gamma = function() {
      filtersStack += "g += 0.5; r -= 0.4";
+     return this;
   };
 
   this.computeSobel = function(x, y, name) {
@@ -372,6 +380,7 @@ function CanvasFilters() {
       filtersStack += '} else {';
       filtersStack += name + '=0';
       filtersStack += '};';
+      
   };
 
   this.sobel = function(secondary, coef, alpha, r, g, b, a, r2, g2, b2, a2) {
@@ -431,6 +440,6 @@ function CanvasFilters() {
       filtersStack += 'b += ' + (al2) + ' * AG;';
 
       filtersStack += '};';
-
+      return this;
   }
 }
